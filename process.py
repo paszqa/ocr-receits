@@ -1,3 +1,5 @@
+#OCR-Receits
+#Second file to execute
 import requests
 import re
 
@@ -51,7 +53,7 @@ for line in raw:
         #  content+="[[[["+parts[x].rstrip()+"]]]]"
         #else:
         #  content+=parts[x].rstrip()+" "
-      content+=" "+parts[-3].replace("x", "").rstrip()#+parts[-1].rstrip()
+      content+=parts[-3].replace("x", "").rstrip()#+parts[-1].rstrip()
       content+="\n"
     else:
 #      content
@@ -69,9 +71,12 @@ print(start)
 print(end)
 print("-------")
 print(content)
-from difflib import SequenceMatcher
-s = SequenceMatcher(None, "BakomaJogurtBioldógt", "BomaJgurtBo10g")
-print(s.ratio())
+contentfile = open('content.txt','w')
+contentfile.write(content)
+contentfile.close()
+#from difflib import SequenceMatcher
+#s = SequenceMatcher(None, "BakomaJogurtBioldógt", "BomaJgurtBo10g")
+#print(s.ratio())
 
 #result = re.search('PARAGON(.*)123jasd', s)
 #print(result.group(1))

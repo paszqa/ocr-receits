@@ -1,3 +1,5 @@
+#OCR-Receits
+#First file to execute
 import cv2
 import numpy as np
 import pytesseract
