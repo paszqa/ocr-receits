@@ -1,7 +1,8 @@
-#OCR-Receits
+#OCR-Receits v0.2
 #Second file to execute
 import requests
 import re
+from difflib import SequenceMatcher
 
 def check_for_pattern_in_string(pattern,string):
     if pattern in string:
@@ -12,7 +13,8 @@ def check_for_pattern_in_string(pattern,string):
         return 0
 
 raw = open('raw.txt','r').readlines()
-#rawlist = raw.readlines()
+infoFile = open('info.txt','w')
+
 start="PARAGON FISKALNY"
 foundstart=0
 end="Podsuma:"
@@ -20,6 +22,38 @@ foundend=0
 content=""
 previousincomplete=0
 alreadyfoundname=0
+
+### Get date from receit:
+for line in raw:
+  shouldBreak=0
+  for part in line.split():
+    match = re.search(r'\d{4}-\d{2}-\d{2}', part)
+    if match:
+      infoFile.write(match.group()+"\n")
+      #print("MATCH:"+str(match.group()))
+      shouldBreak=1
+      break;
+  if shouldBreak == 1:
+    break;
+
+print("------=------------------=---------")
+### Get store name:
+for line in raw:
+  shouldBreak=0
+  for part in line.split():
+    s1 = SequenceMatcher(None, part, "Kaufland")
+    s2 = SequenceMatcher(None, part, "Lidl")
+    s3 = SequenceMatcher(None, part, "Biedronka")
+    s4 = SequenceMatcher(None, part, "Carrefour")
+    s5 = SequenceMatcher(None, part, "Auchan")
+    if s1.ratio() > 0.75 or s2.ratio() > 0.75 or s3.ratio() > 0.75 or s4.ratio() > 0.75 or s5.ratio() > 0.75:
+      infoFile.write(line)
+      shouldBreak=1
+      break;
+  if shouldBreak == 1:
+    break;
+
+### Get product list:
 for line in raw:
   if "PARA" in line:
     start=line
@@ -53,7 +87,7 @@ for line in raw:
         #  content+="[[[["+parts[x].rstrip()+"]]]]"
         #else:
         #  content+=parts[x].rstrip()+" "
-      content+=parts[-3].replace("x", "").rstrip()#+parts[-1].rstrip()
+      content+=" "+parts[-3].replace("x", "").rstrip()#+parts[-1].rstrip()
       content+="\n"
     else:
 #      content
