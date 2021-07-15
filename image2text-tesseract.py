@@ -1,12 +1,15 @@
 #OCR-Receits
 #First file to execute
+#This image2text solution uses offline pytesserac libraries.
+
 import cv2
 import numpy as np
 import pytesseract
 import requests
 from pytesseract import Output
+import sys
 
-img = cv2.imread('image.jpg')
+img = cv2.imread(sys.argv[1])
 
 # get grayscale image
 def get_grayscale(image):
